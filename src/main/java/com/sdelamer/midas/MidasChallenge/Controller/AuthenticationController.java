@@ -24,7 +24,7 @@ public class AuthenticationController {
 
 	@GetMapping("/login")
 	public ResponseEntity<String> testGet() throws LoginException {
-		return ResponseEntity.ok("Loged in!");
+		return ResponseEntity.ok("Logged in!");
 	}
 
 	@PostMapping("/login")

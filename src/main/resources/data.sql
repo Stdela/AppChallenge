@@ -31,8 +31,8 @@ INSERT INTO app_user (
     (19,current_timestamp(),NULL,0,'Luis@gmail.com','Luis','Spinetta',current_timestamp(),'$2a$10$GceBTMx5xPcFs8skaMTH2.taB0mzHt7U3fY2J0Mjevj0ARq81XK0i'),
     (20,current_timestamp(),NULL,0,'Abril@gmail.com','Abril','Sierra',current_timestamp(),'$2a$10$GceBTMx5xPcFs8skaMTH2.taB0mzHt7U3fY2J0Mjevj0ARq81XK0i');
     
-   /*INSERT INTO product (id, name, price, count) VALUES
-(1, 'Smartphone', 299.99, 100),
+ /*  INSERT INTO product (id, name, price, count) VALUES
+(, 'Smartphone', 299.99, 100),
 (2, 'Televisor LED', 499.99, 50),
 (3, 'Tableta', 199.99, 200),
 (4, 'Cámara digital', 199.99, 75),
@@ -41,5 +41,4 @@ INSERT INTO app_user (
 (7, 'Reproductor de Blu-ray', 99.99, 120),
 (8, 'Altavoces Bluetooth', 49.99, 30),
 (9, 'Reloj inteligente', 149.99, 40),
-(10, 'Consola de videojuegos', 399.99, 60);
-*/
+(10, 'Consola de videojuegos', 399.99, 60);*/
