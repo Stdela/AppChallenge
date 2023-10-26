@@ -3,6 +3,7 @@ package com.sdelamer.midas.MidasChallenge.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -48,12 +49,17 @@ public class CustomWebSecurityConfigurationAdapter {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-		http
-      .csrf().disable();
-		http.authorizeHttpRequests(authorize ->
-		authorize.requestMatchers(mvc.pattern("/auth/login"), mvc.pattern("/error/**")).permitAll().anyRequest()
-				.authenticated()).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		http.csrf().disable();
+//		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
+		http.authorizeHttpRequests(authorize -> authorize.requestMatchers(mvc.pattern("/users")).hasRole("ADMIN")
+				.requestMatchers(mvc.pattern(HttpMethod.PUT, "/products/**")).hasRole("ADMIN")
+				.requestMatchers(mvc.pattern(HttpMethod.POST, "/products")).hasRole("ADMIN")
+				.requestMatchers(mvc.pattern("swagger-ui/**")).permitAll()
+				.requestMatchers(mvc.pattern("/auth/login"))
+				.permitAll().anyRequest().authenticated())
+
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

@@ -1,6 +1,5 @@
 package com.sdelamer.midas.MidasChallenge.Security.SecurityService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.sdelamer.midas.MidasChallenge.Model.AppUser;
@@ -34,9 +32,8 @@ public class MyUserDetailsService implements UserDetailsService {
 	}
 
 	private UserDetails createAuthorizedUserFromAppUser(AppUser appUser) {
-		List<GrantedAuthority> list2 = new ArrayList<>();
-		list2.add(new SimpleGrantedAuthority("ROLE_USER"));
-		return new User(appUser.getEmail(), appUser.getPassword(), list2);
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(appUser.getRole() == null ? "USER" : appUser.getRole().getName());
+		return new User(appUser.getEmail(), appUser.getPassword(), List.of(grantedAuthority));
 	}
 
 }

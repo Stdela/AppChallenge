@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS app_user (
+/*CREATE TABLE IF NOT EXISTS app_user (
   id BIGINT PRIMARY KEY,
   creation_date DATE,
   deleted_at DATE,
@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS app_user (
   last_name VARCHAR(255),
   last_update DATE,
   password VARCHAR(255) NOT NULL
-);
+);*/
