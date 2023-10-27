@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sdelamer.midas.MidasChallenge.Dto.ProductDto;
+import com.sdelamer.midas.MidasChallenge.Exception.DataAlreadyExistsException;
 import com.sdelamer.midas.MidasChallenge.Exception.NotFoundException;
 import com.sdelamer.midas.MidasChallenge.Model.Product;
 import com.sdelamer.midas.MidasChallenge.Service.ProductService;
@@ -37,7 +38,6 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
-
 	@Operation(summary = "Gets all products")
 	@GetMapping
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found products", content = {
@@ -52,7 +52,7 @@ public class ProductController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class)) }) })
 
 	public ResponseEntity<Product> createProduct(
-			@Parameter(description = "body of product to create") @Valid @RequestBody ProductDto productDto) {
+			@Parameter(description = "body of product to create") @Valid @RequestBody ProductDto productDto) throws DataAlreadyExistsException {
 		return new ResponseEntity<>(productService.save(productDto), HttpStatus.OK);
 	}
 

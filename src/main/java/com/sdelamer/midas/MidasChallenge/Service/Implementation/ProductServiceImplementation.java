@@ -7,11 +7,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sdelamer.midas.MidasChallenge.Dto.ProductDto;
+import com.sdelamer.midas.MidasChallenge.Exception.DataAlreadyExistsException;
 import com.sdelamer.midas.MidasChallenge.Exception.NotFoundException;
 import com.sdelamer.midas.MidasChallenge.Mapper.ProductMapper;
 import com.sdelamer.midas.MidasChallenge.Model.Product;
 import com.sdelamer.midas.MidasChallenge.Repository.ProductRepository;
 import com.sdelamer.midas.MidasChallenge.Service.ProductService;
+
+import jakarta.validation.Valid;
 
 @Service
 public class ProductServiceImplementation implements ProductService {
@@ -60,7 +63,10 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	@Override
-	public Product save(ProductDto productDto) {
+	public Product save(@Valid ProductDto productDto) throws DataAlreadyExistsException {
+		if (productRepository.findByName(productDto.getName()).isPresent()) {
+			throw new DataAlreadyExistsException("Product with name " + productDto.getName() +"  already exists");
+		}
 		Product newProduct = productMapper.productDtoToProduct(productDto);
 		productRepository.save(newProduct); 
 		return newProduct;

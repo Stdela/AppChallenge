@@ -18,9 +18,8 @@ public class Product {
 
 	@Schema(description = "Name of the product", example = "Sample Product")
 	@Nonnull
-	@Min(value = 0)
+	@Size(min = 6, message = "Product must have a meaningful name")
 	private String name;
-
 	@Schema(description = "Price of the product", minimum = "0", example = "25.99")
 	@Nonnull
 	@Min(value = 0, message = "Price must be grater than or equal to 0")
