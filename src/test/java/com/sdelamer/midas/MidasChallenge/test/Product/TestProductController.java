@@ -76,7 +76,6 @@ public class TestProductController {
 		productGetAll = new ArrayList<>();
 		productGetAll.add(productToBeRepeated);
 		productGetAll.add(productWronglyDesigned);
-//		productGetAll.forEach(product -> productRepository.save(product));
 		Mockito.when(productService.findAllProducts()).thenReturn(productGetAll);
 
 	}
@@ -97,6 +96,8 @@ public class TestProductController {
 		mockMvc.perform(post("/products").content(JSONRequest).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden()).andReturn();
 	}
+
+	
 
 	@Test
 	@WithMockUser(username = "mariano@gmail.com", roles = "ADMIN")
