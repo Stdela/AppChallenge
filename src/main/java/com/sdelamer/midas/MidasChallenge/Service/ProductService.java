@@ -12,10 +12,10 @@ public interface ProductService {
 
 	Product findProductById(Long id) throws NotFoundException;
 
-	ProductDto updateProduct(Long id, ProductDto productDto);
+	ProductDto updateProduct(Long id, ProductDto productDto) throws NotFoundException;
 
 	Product save(ProductDto productDto);
 
-	void deleteProductById(Long id);
+	void deleteProductById(Long id) throws NotFoundException;
 
 }

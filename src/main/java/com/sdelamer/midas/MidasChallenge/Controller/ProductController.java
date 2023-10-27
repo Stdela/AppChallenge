@@ -19,37 +19,75 @@ import com.sdelamer.midas.MidasChallenge.Exception.NotFoundException;
 import com.sdelamer.midas.MidasChallenge.Model.Product;
 import com.sdelamer.midas.MidasChallenge.Service.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 @RequestMapping("/products")
 @RestController
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "User", description = "The User API. Contains all the operations that can be performed on a user.")
 public class ProductController {
 
 	@Autowired
 	ProductService productService;
 
+	@Operation(summary = "Gets all products")
 	@GetMapping
-//	TODO reemplazar x dto
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found products", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class)) }) })
 	public ResponseEntity<List<Product>> getAllProducts() {
 		return new ResponseEntity<>(productService.findAllProducts(), HttpStatus.OK);
 	}
 
+	@Operation(summary = "Creates a product ")
 	@PostMapping
-	public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto) {
-		return new ResponseEntity<>(productService.save(productDto)  , HttpStatus.OK);
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Product created", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class)) }) })
+
+	public ResponseEntity<Product> createProduct(
+			@Parameter(description = "body of product to create") @Valid @RequestBody ProductDto productDto) {
+		return new ResponseEntity<>(productService.save(productDto), HttpStatus.OK);
 	}
+
+	@Operation(summary = "Get a product by its id")
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable Long id) throws NotFoundException {
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Product found", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
+			@ApiResponse(responseCode = "404", description = "Product not found"), })
+	public ResponseEntity<Product> getProductById(
+			@Parameter(description = "id of product to be searched") @PathVariable Long id) throws NotFoundException {
 		return new ResponseEntity<>(productService.findProductById(id), HttpStatus.OK);
 	}
 
+	@Operation(summary = "Delete a product by its id")
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable Long id) throws NotFoundException {
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Product deleted"),
+			@ApiResponse(responseCode = "404", description = "Product not found"), })
+	public ResponseEntity<?> deleteProduct(
+			@Parameter(description = "id of product to be deleted") @PathVariable Long id) throws NotFoundException {
 		productService.deleteProductById(id);
 		return new ResponseEntity<>("Product was successfully deleted .", HttpStatus.OK);
 	}
 
+	@Operation(summary = "Modifies a product by its id")
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable Long id) {
-		return new ResponseEntity<ProductDto>(productService.updateProduct(id, productDto), HttpStatus.CREATED);
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Product modified", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Product Not Found"), })
+	public ResponseEntity<ProductDto> updateProduct(
+			@Parameter(description = "Product to edit body") @RequestBody ProductDto productDto,
+			@Parameter(description = "id of product to be edited") @PathVariable Long id) throws NotFoundException {
+		return new ResponseEntity<ProductDto>(productService.updateProduct(id, productDto), HttpStatus.OK);
 	}
 
 }

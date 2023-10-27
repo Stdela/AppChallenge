@@ -1,11 +1,14 @@
 package com.sdelamer.midas.MidasChallenge.Model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Product {
@@ -13,15 +16,16 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column()
+	@Schema(description = "Name of the product", example = "Sample Product")
 	@Nonnull
+	@Min(value = 0)
 	private String name;
 
-	@Column()
+	@Schema(description = "Price of the product", minimum = "0", example = "25.99")
 	@Nonnull
+	@Min(value = 0, message = "Price must be grater than or equal to 0")
 	private Double price;
-
-	@Column()
+	@Schema(description = "Count of the product", example = "100")
 	@Nonnull
 	private Long count;
 

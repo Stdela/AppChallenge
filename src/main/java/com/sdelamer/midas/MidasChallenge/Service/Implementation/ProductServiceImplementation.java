@@ -39,7 +39,7 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	@Override
-	public ProductDto updateProduct(Long id, ProductDto productDto) {
+	public ProductDto updateProduct(Long id, ProductDto productDto) throws NotFoundException{
 		Product product = productRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Product does not exist."));
 		product.setName(productDto.getName());

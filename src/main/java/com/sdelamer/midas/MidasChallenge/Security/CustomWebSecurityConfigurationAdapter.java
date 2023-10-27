@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -49,17 +50,19 @@ public class CustomWebSecurityConfigurationAdapter {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-		http.csrf().disable();
+//		http.csrf().disable();
 //		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
-		http.authorizeHttpRequests(authorize -> authorize.requestMatchers(mvc.pattern("/users")).hasRole("ADMIN")
+		http.authorizeHttpRequests(authorize -> 		
+		authorize.requestMatchers(mvc.pattern("/users")).hasRole("ADMIN")
 				.requestMatchers(mvc.pattern(HttpMethod.PUT, "/products/**")).hasRole("ADMIN")
 				.requestMatchers(mvc.pattern(HttpMethod.POST, "/products")).hasRole("ADMIN")
-				.requestMatchers(mvc.pattern("swagger-ui/**")).permitAll()
+				.requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+				.requestMatchers(mvc.pattern("/v3/**")).permitAll()
 				.requestMatchers(mvc.pattern("/auth/login"))
-				.permitAll().anyRequest().authenticated())
-
-				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+				.permitAll().anyRequest().authenticated()	)
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.csrf(AbstractHttpConfigurer::disable);
 
 		return http.build();
 	}

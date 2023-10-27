@@ -1,10 +1,23 @@
 package com.sdelamer.midas.MidasChallenge.Dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Min;
+
 public class ProductDto {
 
-	String name;
-	Double price;
-	Long count;
+	@Schema(description = "Name of the product", example = "Sample Product")
+	@Nonnull
+	@Min(value = 0)
+	private String name;
+
+	@Schema(description = "Price of the product", minimum = "0", example = "25.99")
+	@Nonnull
+	@Min(value = 0, message = "Price must be grater than or equal to 0")
+	private Double price;
+	@Schema(description = "Count of the product", example = "100")
+	@Nonnull
+	private Long count;
 
 	public ProductDto() {
 
